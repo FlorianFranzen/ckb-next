@@ -9,6 +9,52 @@
 #include <QElapsedTimer>
 #include <limits>
 #include "batterysystemtrayicon.h"
+#include <QVersionNumber>
+
+#include <QDebug> // FIXME
+
+class CkbVersionNumber {
+    QVersionNumber ver;
+public:
+    CkbVersionNumber& operator=(const QVersionNumber& newver){
+        ver = newver;
+        return *this;
+    }
+    QString toString() const {
+        if(ver.isNull())
+            return QString(QObject::tr("N/A"));
+        return ver.toString();
+    }
+    bool isNull() const {
+        return ver.isNull();
+    }
+};
+
+struct firmware_t {
+    CkbVersionNumber app;
+    CkbVersionNumber bld;
+    CkbVersionNumber radio;
+    bool parse(const QString& str){
+        // KeepEmptyParts is the default
+        QVector<QStringRef> split = str.leftRef(str.size()-1).split(QChar('\n'));
+        // Old NXP format
+        if(split.size() == 1){
+            QString fw = split.at(0).toString();
+            fw.insert(2, QChar('.'));
+            app = QVersionNumber::fromString(fw);
+        } else if (split.size() == 3) {
+           app = QVersionNumber::fromString(split.at(0));
+           bld = QVersionNumber::fromString(split.at(1));
+           radio = QVersionNumber::fromString(split.at(2));
+        }
+        qDebug() << split;
+        return false;
+    }
+    float toFloat() const {
+        qWarning() << "DO NOT CALL ME";
+        return 1.2f;
+    }
+};
 
 // Class for managing devices
 class Kb : public QThread
@@ -19,11 +65,12 @@ public:
     QString usbModel, usbSerial;
     // Device information
     QStringList features;
-    QString firmware, pollrate;
+    QString pollrate;
     bool monochrome;
     ushort productID;
     bool hwload;
     bool adjrate;
+    firmware_t firmware;
 
     // Keyboard model
     inline KeyMap::Model    model() const                       { return _model; }

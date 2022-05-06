@@ -21,7 +21,7 @@ FwUpgradeDialog::FwUpgradeDialog(QWidget* parent, float newV, const QByteArray& 
     blob(fwBlob), kb(device), evLoop(0), exitSuccess(true)
 {
     ui->setupUi(this);
-    ui->curLabel->setText(kb->firmware);
+    ui->curLabel->setText(kb->firmware.app.toString());
     ui->newLabel->setText(QString::number(newV, 'f', 2));
     ui->devLabel->setText(kb->usbModel);
 

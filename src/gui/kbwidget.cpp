@@ -348,7 +348,7 @@ void KbWidget::devUpdate(){
     // Update device tab
     ui->devLabel->setText(device->usbModel);
     ui->serialLabel->setText(device->usbSerial);
-    ui->fwLabel->setText(device->firmware);
+    ui->fwLabel->setText(device->firmware.app.toString());
     // This is needed so that the currentIndexChanged event doesn't fire
     // If it does, we'll end up with an always greyed out box when pollrate != 1
     bool block = ui->pollRateBox->blockSignals(true);
