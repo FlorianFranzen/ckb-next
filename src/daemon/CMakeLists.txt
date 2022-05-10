@@ -66,6 +66,7 @@ if (MACOS OR LINUX)
               device_keyboard.c
               device_mouse.c
               device_bragi.c
+              device_laptop.c
               device_vtable.c
               devnode.c
               dpi.c

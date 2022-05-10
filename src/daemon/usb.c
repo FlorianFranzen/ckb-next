@@ -115,6 +115,10 @@ const device_desc models[] = {
     { V_CORSAIR, P_POLARIS, },
     // Headset stands
     { V_CORSAIR, P_ST100, },
+    // Laptops
+    { V_ITE, P_LEGION_Y730, },
+    { V_ITE, P_LEGION_7i, },
+    { V_ITE, P_LEGION_7a, },
 };
 
 const size_t N_MODELS = sizeof(models) / sizeof(device_desc);
@@ -151,6 +155,8 @@ int enable_experimental = 0;
 const char* vendor_str(ushort vendor){
     if(vendor == V_CORSAIR)
         return "corsair";
+    if(vendor == V_ITE)
+        return "ite";
     return "";
 }
 
@@ -241,6 +247,12 @@ const char* product_str(ushort product){
         return "darkcore";
     if(product == P_ST100)
         return "st100";
+    if(product == P_LEGION_Y730)
+        return "legion_y730";
+    if(product == P_LEGION_7i)
+        return "legion_7i";
+    if(product == P_LEGION_7a)
+        return "legion_7a";
     return "";
 }
 
@@ -261,6 +273,8 @@ const char* product_str(ushort product){
 static const devcmd* get_vtable(usbdevice* kb){
     ushort vendor = kb->vendor;
     ushort product = kb->product;
+    if(IS_LAPTOP(vendor, product))
+        return &vtable_laptop_kb;
     if(kb->protocol == PROTO_BRAGI) {
         if(IS_DONGLE(kb))
             return &vtable_bragi_dongle;

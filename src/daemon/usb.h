@@ -160,6 +160,14 @@
 #define P_ST100              0x0a34
 #define IS_ST100(kb)         ((kb)->vendor == V_CORSAIR && ((kb)->product == P_ST100))
 
+
+// Special line of laptop devices
+#define V_ITE                0x048d
+
+#define P_LEGION_Y730        0xc935
+#define P_LEGION_7i          0xc956
+#define P_LEGION_7a          0xc968 
+
 extern const size_t N_MODELS;
 
 typedef struct _device_desc {
@@ -217,6 +225,9 @@ const char* product_str(ushort product);
 /// Full color range (16.8M) vs partial color range (512)
 #define IS_FULLRANGE(kb)                (!IS_LEGACY((kb)->vendor, (kb)->product) && (kb)->product != P_K65 && (kb)->product != P_K70 && (kb)->product != P_K95 && (kb)->product != P_STRAFE_NRGB)
 
+/// Laptop test
+#define IS_LAPTOP(vendor, product)	((vendor) == (V_ITE) && ((product) == (P_LEGION_Y730) || (product) == (P_LEGION_7i) || (product) == (P_LEGION_7a)))
+
 /// Mouse vs keyboard test
 #define IS_MOUSE(vendor, product)       ((vendor) == (V_CORSAIR) && ((product) == (P_M55_RGB_PRO) || (product) == (P_M65) || (product) == (P_M65_PRO) || (product) == (P_M65_RGB_ELITE) || (product) == (P_M95) || (product) == (P_SABRE_O) || (product) == (P_SABRE_L) || (product) == (P_SABRE_N) || (product) == (P_SCIMITAR) || (product) == (P_SCIMITAR_PRO) || (product) == (P_SCIMITAR_ELITE) || (product) == (P_SABRE_O2) || (product) == (P_GLAIVE) || (product) == (P_HARPOON) || (product) == (P_HARPOON_PRO) || (product) == (P_KATAR) || (product) == (P_KATAR_PRO) || (product) == (P_KATAR_PRO_XT) || (product) == (P_IRONCLAW) || (product) == (P_NIGHTSWORD) || (product) == (P_DARK_CORE) || (product) == (P_DARK_CORE_WL) || (product) == (P_DARK_CORE_SE) || (product) == (P_DARK_CORE_SE_WL) || (product) == (P_IRONCLAW_W_U) || (product) == (P_IRONCLAW_W_D) || (product) == (P_DARK_CORE_RGB_PRO_SE) || (product) == (P_DARK_CORE_RGB_PRO_SE_WL) || (product) == P_HARPOON_WL_U || (product) == P_HARPOON_WL_D || (product) == P_GLAIVE_PRO))
 
@@ -246,7 +257,7 @@ const char* product_str(ushort product);
 #define IS_V2_OVERRIDE(kb)              (IS_V3_OVERRIDE(kb) || IS_PLATINUM(kb) || IS_K63(kb) || IS_K68(kb) || IS_HARPOON(kb) || IS_GLAIVE(kb) || IS_KATAR(kb) || (kb)->product == P_STRAFE_NRGB_2 || IS_POLARIS(kb) || IS_ST100(kb) || (kb)->product == P_SCIMITAR_PRO || (kb)->product == P_K66)
 
 /// Used for devices that have a single IN endpoint, and no HID input
-#define IS_SINGLE_EP(kb)                (IS_POLARIS(kb) || IS_ST100(kb))
+#define IS_SINGLE_EP(kb)                ((kb)->vendor == V_ITE || IS_POLARIS(kb) || IS_ST100(kb))
 
 /// Used for devices which support wireless.
 #define IS_WIRELESS_DEV(kb)             (IS_WIRELESS((kb)->vendor, (kb)->product))
